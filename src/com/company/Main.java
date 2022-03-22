@@ -1,9 +1,13 @@
 package com.company;
 
+import com.sun.org.apache.bcel.internal.generic.SWITCH;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 import java.time.LocalDate;
+
+import static javafx.application.Platform.exit;
 
 public class Main {
 
@@ -22,17 +26,61 @@ public class Main {
 
     public void start(){
         readCSVFiles();
-        viewLists();
-        //issueLoan();
-        renewLoan();
-        viewLists();
+        menuLoop();
+
 
     }
+
+    public void menuLoop(){
+        displayOptionMenu();
+        int input =  Integer.parseInt(scanner.nextLine());
+        optionMenu(input);
+    }
+
+    public void optionMenu(int option){
+        switch (option){
+            case 1:viewLists("items");
+            break;
+            case 2:viewLists("loans");
+            break;
+            case 3:viewLists("users");
+            break;
+            case 4:issueLoan();
+            break;
+            case 5:renewLoan();
+            break;
+            case 6:returnLoan();
+            break;
+            case 7:
+                System.out.println("Exiting program");
+                exit();
+                break;
+            default:
+                System.out.println("Invalid input, please try again");
+                break;
+
+
+        }
+        System.out.println();
+        System.out.println();
+        menuLoop();
+
+    }
+
+    public void displayOptionMenu(){
+        System.out.println("Enter 1 to view list of items" +
+                "\nEnter 2 to view list of loans" +
+                "\nEnter 3 to view list of users" +
+                "\nEnter 4 to issue an item" +
+                "\nEnter 5 to renew a loan" +
+                "\nEnter 6 to return an item" +
+                "\nEnter 7 to exit the program");
+    }
+
 
     public void issueLoan(){
         int barcode = inputBarcode();
         String userID = inputUserID();
-
 
         LoanManager loanManager = new LoanManager(itemList,loanList,userList);
         loanManager.issueLoan(barcode,userID);
@@ -44,6 +92,13 @@ public class Main {
 
         LoanManager loanManager = new LoanManager(itemList,loanList,userList);
         loanManager.renewLoan(barcode,userID);
+    }
+
+    public void returnLoan(){
+        int barcode = inputBarcode();
+        LoanManager loanManager = new LoanManager(itemList,loanList,userList);
+        loanManager.returnItem(barcode);
+        System.out.printf("Barcode %s has been removed from loan list%n",barcode);
     }
 
     public int inputBarcode(){
@@ -63,11 +118,18 @@ public class Main {
         itemList = reader.readItemsCSV();
     }
 
-    public void viewLists(){
+    public void viewLists(String list){
         ViewList viewList = new ViewList();
-        viewList.ViewList(loanList);
-       // viewList.ViewList(userList);
-       // viewList.ViewList(itemList);
+        switch (list){
+            case "items": viewList.ViewList(itemList);
+            break;
+            case "loans": viewList.ViewList(loanList);
+            break;
+            case "users": viewList.ViewList(userList);
+            break;
+            default:
+                break;
+        }
 
     }
 
