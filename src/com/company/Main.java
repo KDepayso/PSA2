@@ -21,19 +21,17 @@ public class Main {
         Main MainMethod = new Main();
         MainMethod.start();
 
-
     }
 
     public void start(){
         readCSVFiles();
         menuLoop();
 
-
     }
 
     public void menuLoop(){
         displayOptionMenu();
-        int input =  Integer.parseInt(scanner.nextLine());
+        int input =  parseInt();
         optionMenu(input);
     }
 
@@ -103,8 +101,20 @@ public class Main {
 
     public int inputBarcode(){
         System.out.println("Please enter the barcode of the item");
-        return Integer.parseInt(scanner.nextLine());
+        return parseInt();
     }
+
+    public int parseInt(){
+        while(true){
+            try{
+                return Integer.parseInt(scanner.nextLine());
+            }
+            catch (Exception e){
+                System.out.println("Invalid input detected, please try again.");
+            }
+        }
+    }
+
 
     public String inputUserID(){
         System.out.println("Please enter the User ID");
