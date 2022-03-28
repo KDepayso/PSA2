@@ -1,11 +1,8 @@
 package com.company;
 
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
-
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
-import java.time.LocalDate;
 
 import static javafx.application.Platform.exit;
 
@@ -17,7 +14,7 @@ public class Main {
 
     Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         Main MainMethod = new Main();
         MainMethod.start();
 
@@ -35,7 +32,7 @@ public class Main {
         optionMenu(input);
     }
 
-    public void optionMenu(int option){
+    public void optionMenu(int option)  {
         switch (option){
             case 1:viewLists("items");
             break;
@@ -50,8 +47,9 @@ public class Main {
             case 6:returnLoan();
             break;
             case 7:
+                writeLoansToCSV();
                 System.out.println("Exiting program");
-                exit();
+                System.exit(0);
                 break;
             default:
                 System.out.println("Invalid input, please try again");
@@ -140,6 +138,12 @@ public class Main {
             default:
                 break;
         }
+
+    }
+
+    public void writeLoansToCSV() {
+        CSVWriter csvWriter = new CSVWriter();
+        csvWriter.writeLoanCSV(loanList);
 
     }
 

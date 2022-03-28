@@ -3,6 +3,7 @@ package com.company;
 import com.sun.xml.internal.txw2.output.DumbEscapeHandler;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class Loan implements Printable{
@@ -12,6 +13,8 @@ public class Loan implements Printable{
     private LocalDate issueDate;
     private LocalDate dueDate;
     private int numRenews = 0;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public Loan() {
     }
@@ -46,8 +49,10 @@ public class Loan implements Printable{
         this.userID = userID;
     }
 
-    public LocalDate getIssueDate() {
-        return issueDate;
+    public LocalDate getIssueDate() {return issueDate;}
+
+    public String getIssueDateAsString(){
+        return issueDate.format(formatter);
     }
 
     private void setIssueDate() {
@@ -57,6 +62,10 @@ public class Loan implements Printable{
 
     public LocalDate getDueDate() {
         return dueDate;
+    }
+
+    public String getDueDateAsString(){
+        return dueDate.format(formatter);
     }
 
     public void setDueDate(LocalDate dueDate) {
