@@ -10,8 +10,8 @@ public class Loan implements Printable{
 
     private int itemBarcode = 0;
     private String userID = "";
-    private LocalDate issueDate;
-    private LocalDate dueDate;
+    private LocalDate issueDate = LocalDate.now();
+    private LocalDate dueDate = LocalDate.now();
     private int numRenews = 0;
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

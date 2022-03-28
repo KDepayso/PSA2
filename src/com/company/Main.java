@@ -76,7 +76,7 @@ public class Main {
 
     public void issueLoan(){
         int barcode = inputBarcode();
-        String userID = inputUserID();
+        String userID = inputUserID().toUpperCase();
 
         LoanManager loanManager = new LoanManager(itemList,loanList,userList);
         loanManager.issueLoan(barcode,userID);
@@ -84,17 +84,15 @@ public class Main {
 
     public void renewLoan(){
         int barcode = inputBarcode();
-        String userID = inputUserID();
-
         LoanManager loanManager = new LoanManager(itemList,loanList,userList);
-        loanManager.renewLoan(barcode,userID);
+        loanManager.renewLoan(barcode);
     }
 
     public void returnLoan(){
         int barcode = inputBarcode();
         LoanManager loanManager = new LoanManager(itemList,loanList,userList);
         loanManager.returnItem(barcode);
-        System.out.printf("Barcode %s has been removed from loan list%n",barcode);
+
     }
 
     public int inputBarcode(){

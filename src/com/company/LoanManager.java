@@ -18,7 +18,6 @@ public class LoanManager {
         this.items = items;
         this.loans = loans;
         this.users = users;
-
     }
 
     public void issueLoan(int barcode, String userID){
@@ -26,13 +25,11 @@ public class LoanManager {
         while(true){
             try{
                 if(barcodeDoesNotExist(barcode))
-                    throw new BarCodeNotFoundException("BarCode doesn't exist");
-
+                    throw new BarCodeNotFoundException();
                 if(userIDDoesNotExist(userID))
-                    System.out.println("UserID doesn't exist");
+                    throw new UserIDNotFoundException();
                 if(itemAlreadyLoaned(barcode))
                     System.out.println("Item already loaned");
-
                 break;
 
             }
@@ -40,38 +37,46 @@ public class LoanManager {
                 System.out.println("BarCode does not exist, please try again");
                 barcode = Integer.parseInt(scanner.nextLine());
             }
-            catch (Exception ex){
-                System.out.println("There was an error with your input, please try again");
+            catch (UserIDNotFoundException ex){
+                System.out.println("UserID doesn't exist, please try again");
+                userID = scanner.nextLine();
             }
+
         }
+
         LocalDate issueDate = getDueDate(barcode);
-
-
-
         Loan newLoan = new Loan(barcode,userID.toUpperCase(Locale.ROOT),issueDate);
-
         loans.add((newLoan));
     }
 
-    public void renewLoan(int barcode, String userID){
-        if(barcodeDoesNotExist(barcode))
-            System.out.println("BarCode doesn't exist");
-        if(userIDDoesNotExist(userID))
-            System.out.println("UserID doesn't exist");
-
-        if(exceedMaxRenews(barcode))
+    public void renewLoan(int barcode){
+        if(barcodeDoesNotExistLoan(barcode))
+            System.out.println("BarCode doesn't exist or is not currently loaned out");
+        else if(exceedMaxRenews(barcode))
             System.out.println("Item has already exceeded the maximum amount of times it can be loaned");
+        else{
+            Loan renewLoan = getLoan(barcode);
+            renewLoan.increaseNumRenews();
+            renewLoan.setDueDate(getDueDate(barcode));
 
-        Loan renewLoan = getLoan(barcode);
-        renewLoan.increaseNumRenews();
-        renewLoan.setDueDate(getDueDate(barcode));
+            System.out.println("Item has been renewed, new due date is " + renewLoan.getDueDateAsString());
+        }
+
 
 
     }
 
     public void returnItem(int barcode){
-        Loan returnLoan = getLoan(barcode);
-        loans.remove(returnLoan);
+        if(barcodeDoesNotExistLoan(barcode))
+            System.out.println("Item is not currently loaned out");
+        else{
+            if(lateReturn(barcode))
+                System.out.println("Item is returned late");
+            Loan returnLoan = getLoan(barcode);
+            loans.remove(returnLoan);
+            System.out.printf("Barcode %s has been removed from loan list%n",barcode);
+
+        }
 
     }
 
@@ -83,6 +88,11 @@ public class LoanManager {
             return LocalDate.now().plusWeeks(1);
         else return LocalDate.now();
 
+    }
+
+    private boolean lateReturn(int barcode){
+        Loan returnLoan = getLoan(barcode);
+        return returnLoan.getDueDate().isBefore(LocalDate.now());
     }
 
     private Loan getLoan(int barcode){
@@ -116,6 +126,11 @@ public class LoanManager {
     private boolean barcodeDoesNotExist(int barcode){
        Item item = getItem(barcode);
        return item.getBarcode() == 0;
+    }
+
+    private boolean barcodeDoesNotExistLoan(int barcode){
+        Loan loan = getLoan(barcode);
+        return loan.getItemBarcode() == 0;
     }
 
 
