@@ -28,9 +28,17 @@ public class LoanManager {
                     throw new BarCodeNotFoundException();
                 if(userIDDoesNotExist(userID))
                     throw new UserIDNotFoundException();
-                if(itemAlreadyLoaned(barcode))
+                if(itemAlreadyLoaned(barcode)){
                     System.out.println("Item already loaned");
-                break;
+                    break;
+                }
+                else{
+                    System.out.println("Item has been successfully loaned");
+                    LocalDate issueDate = getDueDate(barcode);
+                    Loan newLoan = new Loan(barcode,userID.toUpperCase(Locale.ROOT),issueDate);
+                    loans.add((newLoan));
+                    break;
+                }
 
             }
             catch (BarCodeNotFoundException ex){
@@ -39,14 +47,11 @@ public class LoanManager {
             }
             catch (UserIDNotFoundException ex){
                 System.out.println("UserID doesn't exist, please try again");
-                userID = scanner.nextLine();
+                userID = scanner.nextLine().toUpperCase();
             }
 
         }
 
-        LocalDate issueDate = getDueDate(barcode);
-        Loan newLoan = new Loan(barcode,userID.toUpperCase(Locale.ROOT),issueDate);
-        loans.add((newLoan));
     }
 
     public void renewLoan(int barcode){
@@ -79,6 +84,8 @@ public class LoanManager {
         }
 
     }
+
+
 
     private LocalDate getDueDate(int barcode){
         Item item = getItem(barcode);
@@ -144,7 +151,7 @@ public class LoanManager {
 
     private boolean itemAlreadyLoaned(int barcode){
         Loan loan = getLoan(barcode);
-        return loan.getDueDate().isAfter(LocalDate.now());
+        return loan.getItemBarcode() != 0;
 
     }
 

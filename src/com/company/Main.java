@@ -1,10 +1,9 @@
 package com.company;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static javafx.application.Platform.exit;
+
 
 public class Main {
 
@@ -13,6 +12,7 @@ public class Main {
     ArrayList<Item> itemList = new ArrayList<>();
 
     Scanner scanner = new Scanner(System.in);
+    ParseInt parseInt = new ParseInt();
 
     public static void main(String[] args)  {
         Main MainMethod = new Main();
@@ -28,7 +28,7 @@ public class Main {
 
     public void menuLoop(){
         displayOptionMenu();
-        int input =  parseInt();
+        int input =  parseInt.parseInt();
         optionMenu(input);
     }
 
@@ -96,19 +96,9 @@ public class Main {
     }
 
     public int inputBarcode(){
-        System.out.println("Please enter the barcode of the item");
-        return parseInt();
-    }
 
-    public int parseInt(){
-        while(true){
-            try{
-                return Integer.parseInt(scanner.nextLine());
-            }
-            catch (Exception e){
-                System.out.println("Invalid input detected, please try again.");
-            }
-        }
+        System.out.println("Please enter the barcode of the item");
+        return parseInt.parseInt();
     }
 
 

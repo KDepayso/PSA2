@@ -1,6 +1,5 @@
 package com.company;
 
-import com.sun.xml.internal.txw2.output.DumbEscapeHandler;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
